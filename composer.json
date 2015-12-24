@@ -9,9 +9,6 @@
     "magento/module-ui": "self.version",
     "magento/magento-composer-installer": "*"
   },
-  "suggest": {
-    "magento/module-webapi": "1.0.0-beta"
-  },
   "type": "magento2-module",
   "version": "1.0.0",
   "license": [
