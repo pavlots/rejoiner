@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <checkout>
+            <rejoiner_acr>
+                <process_by_cron>1</process_by_cron>
+            </rejoiner_acr>
+        </checkout>
+    </default>
+</config>
