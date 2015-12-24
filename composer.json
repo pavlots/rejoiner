@@ -9,6 +9,7 @@
     "magento/module-ui": "self.version",
     "magento/magento-composer-installer": "*"
   },
+  
   "type": "magento2-module",
   "version": "1.0.0",
   "license": [
