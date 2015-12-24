@@ -15,7 +15,17 @@
   "autoload": {
     "files": [ "registration.php" ],
     "psr-4": {
-      "Magento\\CatalogImportExport\\": ""
+      "Rejoiner\\Acr\\": ""
     }
   }
 }
+
+
+
+
+php /home/faq/work/newmage2/bin/magento setup:install --base-url=http://magento2.com/ \
+--db-host=localhost --db-name=magento2 --db-user=root --db-password=root \
+--admin-firstname=Magento --admin-lastname=User --admin-email=user@example.com \
+--admin-user=admin --admin-password=q1w2e3r4 --language=en_US \
+--currency=USD --timezone=America/Chicago --use-rewrites=1
+
