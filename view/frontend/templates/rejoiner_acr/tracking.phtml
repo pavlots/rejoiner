@@ -19,7 +19,7 @@
     <?php if ($items = $this->getCartItems()):?>
         _rejoiner.push(["setCartData", <?php echo $this->getCartData()?  : ''?>]);
         <?php foreach ($items as $item): ?>
-        <?php $itemsAsJson = $this->helper('Magento\Framework\Jadminson\Helper\Data')->jsonEncode($item); ?>
+        <?php $itemsAsJson = $this->helper('\Magento\Framework\Json\Helper\Data')->jsonEncode($item); ?>
         <?php $itemsAsJson = str_replace('\\', '', $itemsAsJson); ?>
         _rejoiner.push(["setCartItem", <?php echo $itemsAsJson?>]);
         <?php endforeach ?>
