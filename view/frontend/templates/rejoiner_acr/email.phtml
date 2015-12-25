@@ -1,7 +1,0 @@
-<?php
-if ($block->isCustomerLoggedIn()):
-    $customerData = $block->getCustomer(); ?>
-"email":"<?php echo $customerData->getEmail()?>"
-<?php else:
-    return false;
-endif;?>
