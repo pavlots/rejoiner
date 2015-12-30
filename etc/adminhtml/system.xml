@@ -2,17 +2,16 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="checkout" translate="label" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Checkout</label>
             <tab>sales</tab>
             <resource>Magento_Checkout::checkout</resource>
             <group id="rejoiner_acr" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Rejoiner Abandoned Cart Recovery</label>
+                <label>eCommerce Lifecycle Email by Rejoiner</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="site_id" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Rejoiner site-id</label>
+                    <label>Rejoiner Site ID</label>
                     <validate>required-entry</validate>
                 </field>
 
@@ -33,7 +32,7 @@
 
 
                 <field id="process_by_cron" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Scheduled sending information about successfully placed order</label>
+                    <label>Scheduled Conversion API Calls</label>
                     <comment>If disabled calls to the external API will be performed inline during order placement. Under specific circumstances could lead to slower page rendering.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 
