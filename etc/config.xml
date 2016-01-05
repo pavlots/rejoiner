@@ -5,6 +5,8 @@
         <checkout>
             <rejoiner_acr>
                 <process_by_cron>1</process_by_cron>
+                <thumbnail_size_width>200</thumbnail_size_width>
+                <thumbnail_size_height>200</thumbnail_size_height>
             </rejoiner_acr>
         </checkout>
     </default>

@@ -1,39 +1,19 @@
 <?php $rejoinerHelper = $this->getRejoinerHelper() ?>
-    <script type="text/javascript">
-    //<![CDATA[
-    var _rejoiner = _rejoiner || [];
-    _rejoiner.push(["setAccount", "<?php echo $rejoinerHelper->getRejoinerSiteId() ?>"]);
-    _rejoiner.push(["setDomain", "<?php echo $rejoinerHelper->getDomain() ?>"]);
+<?php if ($rejoinerHelper->getRejoinerSiteId() && $rejoinerHelper->getDomain() && $block->getCartItems()):?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "RejoinerAcrTracking": {
+                    "rejoinerSiteId"      : "<?php echo $rejoinerHelper->getRejoinerSiteId() ?>",
+                    "rejoinerDomain"      : "<?php echo $rejoinerHelper->getDomain() ?>",
+                    "trackNumberEnabled"  : "<?php echo $rejoinerHelper->getTrackNumberEnabled()?>",
+                    "persistFormsEnabled" : "<?php echo $rejoinerHelper->getPersistFormsEnabled()?>",
+                    "cartData"            : <?php echo $block->getCartData() ?>,
+                    "cartItems"           : <?php echo $this->helper('\Magento\Framework\Json\Helper\Data')->jsonEncode($block->getCartItems())?>,
+                    "removedItems"        : <?php echo $this->helper('\Magento\Framework\Json\Helper\Data')->jsonEncode($rejoinerHelper->checkRemovedItem())?>
+                }
+            }
+        }
+    </script>
+<?php endif ?>
 
-    <?php if ($rejoinerHelper->getTrackNumberEnabled()):?>
-    _rejoiner.push(["trackNumbers"]);
-    <?php endif ?>
-    <?php if ($rejoinerHelper->getPersistFormsEnabled()):?>
-    _rejoiner.push(["persistForms"]);
-    <?php endif ?>
-    (function() {
-        var s = document.createElement('script'); s.type = 'text/javascript';
-        s.async = true; s.src = 'https://s3.amazonaws.com/rejoiner/js/v3/t.js';
-        var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
-    })();
-    <?php if ($items = $this->getCartItems()):?>
-        _rejoiner.push(["setCartData", <?php echo $this->getCartData()?  : ''?>]);
-        <?php foreach ($items as $item): ?>
-        <?php $itemsAsJson = $this->helper('\Magento\Framework\Json\Helper\Data')->jsonEncode($item); ?>
-        <?php $itemsAsJson = str_replace('\\', '', $itemsAsJson); ?>
-        _rejoiner.push(["setCartItem", <?php echo $itemsAsJson?>]);
-        <?php endforeach ?>
-    <?php endif ?>
-    //]]>
-</script>
-
-<?php if ($removedItems = $rejoinerHelper->checkRemovedItem()): ?>
-<script type="text/javascript">
-    /** removeCartItem **/
-        //<![CDATA[
-        <?php foreach ($removedItems as $item): ?>
-        _rejoiner.push(['removeCartItem', {product_id: '<?php echo $item ?>'}]);
-        <?php endforeach; ?>
-    //]]>
-</script>
-<?php endif; ?>

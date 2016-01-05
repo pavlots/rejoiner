@@ -8,7 +8,7 @@ class SalesQuoteRemoveItem implements \Magento\Framework\Event\ObserverInterface
     public function __construct(
         \Magento\Framework\Session\SessionManager $sessionManager
     ) {
-        $this->_sessionManager  = $sessionManager;
+        $this->_sessionManager = $sessionManager;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)

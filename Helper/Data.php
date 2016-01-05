@@ -12,6 +12,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_REJOINER_API_SECRET        = 'checkout/rejoiner_acr/api_secret';
     const XML_PATH_REJOINER_API_SITE_ID       = 'checkout/rejoiner_acr/site_id';
     const XML_PATH_REJOINER_PROCESS_BY_CRON   = 'checkout/rejoiner_acr/process_by_cron';
+    const XML_PATH_REJOINER_COUPON_GENERATION = 'checkout/rejoiner_acr/coupon_code';
+    const XML_PATH_REJOINER_COUPON_RULE       = 'checkout/rejoiner_acr/salesrule_model';
+    const XML_PATH_REJOINER_THUMBNAIL_WIDTH   = 'checkout/rejoiner_acr/thumbnail_size_width';
+    const XML_PATH_REJOINER_THUMBNAIL_HEIGHT  = 'checkout/rejoiner_acr/thumbnail_size_height';
+
+
     const REJOINER_API_URL                    = 'https://app.rejoiner.com';
     const REJOINER_API_REQUEST_PATH           = '/api/1.0/site/%s/lead/convert';
     const REMOVED_CART_ITEM_SKU_VARIABLE      = 'rejoiner_sku';
@@ -116,7 +122,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function generateCouponCode()
     {
         $couponCode = $this->_checkoutSession->getQuote()->getPromo();
-        $rule_id = $this->getStoreConfig('checkout/rejoiner_acr/salesrule_model');
+        $rule_id = $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_COUPON_RULE);
         $ruleItem = $this->_objectInterface->get('\Magento\SalesRule\Model\Rule')->load($rule_id);
         if ($ruleItem->getUseAutoGeneration() && !$couponCode)
         {
@@ -136,7 +142,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getDomain()
     {
-        $domain = trim($this->getStoreConfig(self::XML_PATH_REJOINER_DOMAIN, \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
+        $domain = trim($this->_scopeConfig->getValue(self::XML_PATH_REJOINER_DOMAIN, \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
         if ($domain[0] == '.') {
             return $domain;
         } else {
@@ -146,27 +152,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getRejoinerSiteId()
     {
-        return $this->getStoreConfig(self::XML_PATH_REJOINER_SITE_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_SITE_ID, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getTrackNumberEnabled()
     {
-        return $this->getStoreConfig(self::XML_PATH_REJOINER_TRACK_NUMBERS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_TRACK_NUMBERS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     public function getPersistFormsEnabled()
     {
-        return $this->getStoreConfig(self::XML_PATH_REJOINER_PERSIST_FORMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_PERSIST_FORMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
-    public function getStoreConfig($path)
+    public function getIsEnabledCouponCodeGeneration()
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_COUPON_GENERATION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    public function getImageWidth()
+    {
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_THUMBNAIL_WIDTH);
+    }
+
+    public function getImageHeight()
+    {
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_THUMBNAIL_HEIGHT);
+    }
+
+    public function getShouldBeProcessedByCron()
+    {
+        return $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_PROCESS_BY_CRON);
     }
 
     public function log($message)
     {
-        if ($this->getStoreConfig(self::XML_PATH_REJOINER_DEBUGGER)) {
+        if ($this->_scopeConfig->getValue(self::XML_PATH_REJOINER_DEBUGGER)) {
             $writer = $this->_objectInterface->create('\Zend\Log\Writer\Stream', array('streamOrUrl' => BP . '/var/log/' . self::REJOINER_API_LOG_FILE));
             $logger = $this->_objectInterface->get('\Zend\Log\Logger');
             $logger->addWriter($writer);
@@ -188,9 +209,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function sendInfoToRejoiner($orderModel)
     {
-        $apiKey = $this->getStoreConfig(self::XML_PATH_REJOINER_API_KEY);
-        $apiSecret = utf8_encode($this->getStoreConfig(self::XML_PATH_REJOINER_API_SECRET));
-        $siteId = $this->getStoreConfig(self::XML_PATH_REJOINER_API_SITE_ID);
+        $apiKey = $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_API_KEY);
+        $apiSecret = utf8_encode($this->_scopeConfig->getValue(self::XML_PATH_REJOINER_API_SECRET));
+        $siteId = $this->_scopeConfig->getValue(self::XML_PATH_REJOINER_API_SITE_ID);
         $requestPath = sprintf(self::REJOINER_API_REQUEST_PATH, $siteId);
         $customerEmail = $orderModel->getBillingAddress()->getEmail();
         $requestBody = utf8_encode(sprintf('{"email": "%s"}', $customerEmail));

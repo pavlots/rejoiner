@@ -36,7 +36,7 @@ class CheckoutOnepageControllerSuccessAction implements \Magento\Framework\Event
         if (!$order->getId()) {
             return $this;
         }
-        if ($this->_rejoinerHelper->getStoreConfig(\Rejoiner\Acr\Helper\Data::XML_PATH_REJOINER_PROCESS_BY_CRON)) {
+        if ($this->_rejoinerHelper->getShouldBeProcessedByCron()) {
             $acrModel = $this->_acrFactory->create();
             $acrModel->setOrderId($order->getId())->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->_timezone->scopeTimeStamp()));
             $acrModel->save();

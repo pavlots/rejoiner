@@ -3,9 +3,6 @@ namespace Rejoiner\Acr\Block;
 
 class Snippets extends \Magento\Framework\View\Element\Template
 {
-    const XML_PATH_REJOINER_THUMBNAIL_WIDTH   = 'checkout/rejoiner_acr/thumbnail_size_width';
-    const XML_PATH_REJOINER_THUMBNAIL_HEIGHT  = 'checkout/rejoiner_acr/thumbnail_size_height';
-
     private $_checkoutSession;
     private $_rejoinerHelper;
     private $_imageHelper;
@@ -32,12 +29,8 @@ class Snippets extends \Magento\Framework\View\Element\Template
     {
         $items = array();
         if ($quote = $this->_checkoutSession->getQuote()) {
-            $imageWidth = 200;
-            $imageHeight = null;
-            if ($this->getStoreConfig($this::XML_PATH_REJOINER_THUMBNAIL_WIDTH)) {
-                $imageWidth  = $this->getStoreConfig($this::XML_PATH_REJOINER_THUMBNAIL_WIDTH);
-                $imageHeight = $this->getStoreConfig($this:: XML_PATH_REJOINER_THUMBNAIL_HEIGHT);
-            };
+            $imageWidth  = $this->_rejoinerHelper->getImageWidth();
+            $imageHeight = $this->_rejoinerHelper->getImageHeight();
             foreach ($quote->getAllVisibleItems() as $item) {
                 $product = $item->getProduct();
                 $imageUrl = $this->_imageHelper->init($product, 'category_page_grid')->resize($imageWidth, $imageHeight)->getUrl();
@@ -64,7 +57,7 @@ class Snippets extends \Magento\Framework\View\Element\Template
                 'value'        => (string) $this->_rejoinerHelper->convertPriceToCents($quote->getGrandTotal()),
                 'returnUrl'    => (string) $this->_rejoinerHelper->getRestoreUrl()
             );
-            if ($this->_rejoinerHelper->getStoreConfig('checkout/rejoiner_acr/coupon_code')) {
+            if ($this->_rejoinerHelper->getIsEnabledCouponCodeGeneration()) {
                 $result['promo'] = $this->_rejoinerHelper->generateCouponCode();
             }
 
